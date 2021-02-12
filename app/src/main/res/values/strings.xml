@@ -2,6 +2,6 @@
     <string name="app_name">DollarChecker</string>
     <string name="savemoney">Save value</string>
     <string name="user_value_saved">The user-tracked value was saved</string>
-    <string name="notify_title">The dollar price has fallen</string>
-    <string name="prifit">"Profit is: "</string>
+    <string name="notify_title">The dollar price has increased</string>
+    <string name="prifit">"Increased by: "</string>
 </resources>

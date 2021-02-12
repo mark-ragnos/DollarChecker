@@ -39,14 +39,14 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        preferences = getSharedPreferences(USER_VALUE, Context.MODE_PRIVATE);
-        //Alarm
-        startAlarm();
-
         btn_save = findViewById(R.id.btn_saveuservalue);
         et_value = findViewById(R.id.et_value);
         lv_history = findViewById(R.id.lv_history);
 
+        //Alarm
+        startAlarm();
+
+        preferences = getSharedPreferences(USER_VALUE, Context.MODE_PRIVATE);
         et_value.setText(preferences.getString(USER_VALUE, "0.00"));
         //simple save user value
         btn_save.setOnClickListener(v -> {
@@ -63,6 +63,7 @@ public class MainActivity extends AppCompatActivity {
             data = new DollarData();
             DollarData.baseDollarData = data;
         }else data = DollarData.baseDollarData;
+
         //adapter
         DollarData.vals.setValueList(new ArrayList<Record>());
         DollarData.adapter = new DollarListAdapter(this,DollarData.vals.getValueList());
@@ -84,5 +85,11 @@ public class MainActivity extends AppCompatActivity {
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, Calendar.getInstance().getTimeInMillis() + 1000, 10000, pendingIntent);
 
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        data.clearRx();
+        super.onDestroy();
     }
 }

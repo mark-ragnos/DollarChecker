@@ -30,31 +30,29 @@ public class MyService extends IntentService {
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
-        Log.d("TAG", "SERVICE WAS ");
 
         DollarData feedback;
-        if(DollarData.baseDollarData==null)
+        if(DollarData.baseDollarData==null) {
             feedback = new DollarData();
+        }
         else feedback = DollarData.baseDollarData;
 
-
         float userValue = Float.parseFloat(getSharedPreferences(MainActivity.USER_VALUE, MODE_PRIVATE).getString(MainActivity.USER_VALUE, "0.00"));
-
         Record message = feedback.getToday();
+
         if(message==null)
             return;
 
         float todayValue = Float.valueOf(message.getValue().replace(',', '.'));
 
-        if(todayValue > userValue)
+        if(todayValue < userValue)
             return;
 
-        float diff = userValue - todayValue;
-
+        float diff =  todayValue - userValue;
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             CharSequence name = "channel_name";
-            String description = "getString(R.string.channel_description);";
+            String description = "description";
             int importance = NotificationManager.IMPORTANCE_DEFAULT;
             NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
             channel.setDescription(description);
@@ -65,7 +63,8 @@ public class MyService extends IntentService {
                     .setSmallIcon(android.R.drawable.sym_def_app_icon)
                     .setContentTitle(getString(R.string.notify_title))
                     .setContentText(getString(R.string.prifit) + diff)
-                    .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+                    .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                    .setAutoCancel(true);
 
             notificationManager.notify(123, builder.build());
         }
@@ -74,7 +73,5 @@ public class MyService extends IntentService {
     @Override
     public void onDestroy() {
         super.onDestroy();
-
-        Log.d("TAG", "Service destroyed");
     }
 }

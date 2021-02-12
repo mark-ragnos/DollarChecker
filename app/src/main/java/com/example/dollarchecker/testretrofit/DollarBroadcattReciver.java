@@ -9,6 +9,5 @@ public class DollarBroadcattReciver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         context.startService(new Intent(context, MyService.class));
-        Log.d("TAG", "RECIVER");
     }
 }

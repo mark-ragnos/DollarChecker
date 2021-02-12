@@ -13,10 +13,16 @@ import com.example.dollarchecker.testretrofit.CbrApi;
 import java.io.IOException;
 import java.util.Collections;
 
+import io.reactivex.Scheduler;
+import io.reactivex.Single;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.simplexml.SimpleXmlConverterFactory;
 
 public class DollarData {
@@ -26,12 +32,13 @@ public class DollarData {
 
     private Retrofit retrofit;
     private CbrApi cbrApi;
-
+    private Disposable disposable;
 
     public DollarData(){
         retrofit = new Retrofit.Builder()
                 .baseUrl("http://www.cbr.ru/scripts/")
                 .addConverterFactory(SimpleXmlConverterFactory.create())
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build();
 
         cbrApi = retrofit.create(CbrApi.class);
@@ -41,7 +48,6 @@ public class DollarData {
     public Record getToday(){
         Calendar calendar = Calendar.getInstance();
         SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
-
 
         Call<ValCurs> result = cbrApi.getDollarsByRange(format.format(calendar.getTime()), format.format(calendar.getTime()));
 
@@ -53,7 +59,6 @@ public class DollarData {
             e.printStackTrace();
         }
 
-
         return ret;
     }
 
@@ -64,26 +69,18 @@ public class DollarData {
         calendarStart.add(Calendar.MONTH, -1);
 
         SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
-        Call<ValCurs> result = cbrApi.getDollarsByRange(format.format(calendarStart.getTime()), format.format(calendarEdn.getTime()));
+        Single<ValCurs> result = cbrApi.getDollarsByRangeRX(format.format(calendarStart.getTime()), format.format(calendarEdn.getTime()));
 
-        result.enqueue(new Callback<ValCurs>() {
-            @Override
-            public void onResponse(Call<ValCurs> call, Response<ValCurs> response) {
-                if(!response.isSuccessful()){
-                    Log.d("TAG", "Code: " + response.code());
-                    return;
-                }
-                ValCurs res = response.body();
+        disposable = result.subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(r -> {
+                    vals.getValueList().addAll(r.getValueList());
+                    Collections.reverse(vals.getValueList());
+                    adapter.notifyDataSetChanged();
+                });
+    }
 
-                vals.getValueList().addAll(res.getValueList());
-                Collections.reverse(vals.getValueList());
-                adapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onFailure(Call<ValCurs> call, Throwable t) {
-                Log.d("TAG", t.getMessage());
-            }
-        });
+    public void clearRx(){
+        disposable.dispose();
     }
 }
