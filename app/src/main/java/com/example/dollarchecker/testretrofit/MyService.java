@@ -50,24 +50,25 @@ public class MyService extends IntentService {
 
         float diff =  todayValue - userValue;
 
+        NotificationManager notificationManager = getSystemService(NotificationManager.class);
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             CharSequence name = "channel_name";
             String description = "description";
             int importance = NotificationManager.IMPORTANCE_DEFAULT;
             NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
             channel.setDescription(description);
-            NotificationManager notificationManager = getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(channel);
-
-            NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
-                    .setSmallIcon(android.R.drawable.sym_def_app_icon)
-                    .setContentTitle(getString(R.string.notify_title))
-                    .setContentText(getString(R.string.prifit) + diff)
-                    .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                    .setAutoCancel(true);
-
-            notificationManager.notify(123, builder.build());
         }
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
+                .setSmallIcon(android.R.drawable.sym_def_app_icon)
+                .setContentTitle(getString(R.string.notify_title))
+                .setContentText(getString(R.string.prifit) + diff)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setAutoCancel(true);
+
+        notificationManager.notify(123, builder.build());
     }
 
     @Override

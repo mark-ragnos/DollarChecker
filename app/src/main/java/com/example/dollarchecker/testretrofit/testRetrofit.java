@@ -1,4 +1,4 @@
-package com.example.dollarchecker;
+package com.example.dollarchecker.testretrofit;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -6,6 +6,9 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
 
+import com.example.dollarchecker.R;
+import com.example.dollarchecker.Record;
+import com.example.dollarchecker.ValCurs;
 import com.example.dollarchecker.testretrofit.CbrApi;
 import com.example.dollarchecker.testretrofit.JsonPlaceHolderApi;
 import com.example.dollarchecker.testretrofit.Post;
@@ -20,7 +23,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.simplexml.SimpleXmlConverterFactory;
 

@@ -10,7 +10,6 @@ public class Record{
     private  String Date;
     @Attribute
     private  String Id;
-
     @Element
     private String Nominal;
     @Element

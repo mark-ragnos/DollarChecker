@@ -23,7 +23,7 @@
             android:exported="false">
         </service>
 
-        <activity android:name=".testRetrofit" />
+        <activity android:name=".testretrofit.testRetrofit" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

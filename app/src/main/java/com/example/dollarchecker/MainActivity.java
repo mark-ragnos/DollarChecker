@@ -2,7 +2,6 @@ package com.example.dollarchecker;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -15,10 +14,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
-
 import com.example.dollarchecker.testretrofit.DollarBroadcattReciver;
-
 import java.util.ArrayList;
+
 
 public class MainActivity extends AppCompatActivity {
     //Init elements
@@ -50,12 +48,9 @@ public class MainActivity extends AppCompatActivity {
         et_value.setText(preferences.getString(USER_VALUE, "0.00"));
         //simple save user value
         btn_save.setOnClickListener(v -> {
-
             SharedPreferences.Editor editor = preferences.edit();
             editor.putString(USER_VALUE, et_value.getText().toString()).apply();
-
             Toast.makeText(MainActivity.this, R.string.user_value_saved, Toast.LENGTH_LONG).show();
-
         });
 
         //data
@@ -83,8 +78,6 @@ public class MainActivity extends AppCompatActivity {
         calendar.set(Calendar.SECOND, 0);
         //alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, Calendar.getInstance().getTimeInMillis() + 1000, 10000, pendingIntent);
-
-
     }
 
     @Override
