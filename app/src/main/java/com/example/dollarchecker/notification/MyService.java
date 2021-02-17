@@ -31,26 +31,6 @@ public class MyService extends IntentService {
 
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
-
-        /*DollarData feedback;
-        if(DollarData.baseDollarData==null) {
-            feedback = new DollarData();
-        }
-        else feedback = DollarData.baseDollarData;
-
-        float userValue = Float.parseFloat(getSharedPreferences(MainActivity.USER_VALUE, MODE_PRIVATE).getString(MainActivity.USER_VALUE, "0.00"));
-        Record message = feedback.getToday();
-
-        if(message==null)
-            return;
-
-        float todayValue = Float.parseFloat(message.getValue().replace(',', '.'));
-
-        if(todayValue < userValue)
-            return;
-
-        float diff =  todayValue - userValue;
-        */
         CurrencyHelper helper = new CurrencyHelper();
         float userValue = Float.parseFloat(getSharedPreferences(MainActivity.USER_VALUE, MODE_PRIVATE).getString(MainActivity.USER_VALUE, "0.00"));
         Single<Record> today = helper.getToday(Calendar.getInstance());
