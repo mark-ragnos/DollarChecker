@@ -1,6 +1,4 @@
-package com.example.dollarchecker.testretrofit;
-
-import com.example.dollarchecker.ValCurs;
+package com.example.dollarchecker.network;
 
 import io.reactivex.Single;
 import retrofit2.Call;

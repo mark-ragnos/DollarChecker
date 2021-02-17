@@ -1,9 +1,10 @@
-package com.example.dollarchecker.testretrofit;
+package com.example.dollarchecker.notification;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
+
+import com.example.dollarchecker.notification.MyService;
 
 public class DollarBroadcattReciver extends BroadcastReceiver {
     @Override

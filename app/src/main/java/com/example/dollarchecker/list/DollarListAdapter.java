@@ -1,28 +1,32 @@
-package com.example.dollarchecker;
+package com.example.dollarchecker.list;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.ListAdapter;
-import androidx.recyclerview.widget.RecyclerView;
+import com.example.dollarchecker.R;
+import com.example.dollarchecker.network.Record;
 
 import java.util.List;
 
 public class DollarListAdapter extends BaseAdapter {
-    Context context;
     LayoutInflater inflater;
     List<Record> itemList;
 
     public DollarListAdapter(Context context, List<Record> itemList) {
-        this.context = context;
         this.itemList = itemList;
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+    }
+
+    public DollarListAdapter(Context context) {
+        inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+    }
+
+    public void setItemList(List<Record> itemList) {
+        this.itemList = itemList;
     }
 
     @Override

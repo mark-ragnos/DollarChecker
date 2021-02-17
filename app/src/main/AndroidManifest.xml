@@ -14,16 +14,14 @@
         android:theme="@style/Theme.DollarChecker"
         android:usesCleartextTraffic="true">
 
-        <receiver  android:process=":remote" android:name=".testretrofit.DollarBroadcattReciver">
-
-        </receiver>
+        <receiver
+            android:name=".notification.DollarBroadcattReciver"
+            android:process=":remote" />
 
         <service
-            android:name=".testretrofit.MyService"
-            android:exported="false">
-        </service>
+            android:name=".notification.MyService"
+            android:exported="false" />
 
-        <activity android:name=".testretrofit.testRetrofit" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

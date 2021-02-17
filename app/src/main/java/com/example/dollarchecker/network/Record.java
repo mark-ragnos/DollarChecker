@@ -1,4 +1,4 @@
-package com.example.dollarchecker;
+package com.example.dollarchecker.network;
 
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Element;
@@ -8,9 +8,9 @@ import org.simpleframework.xml.Root;
 public class Record{
     @Attribute
     private  String Date;
-    @Attribute
+    @Attribute(required = false)
     private  String Id;
-    @Element
+    @Element(required = false)
     private String Nominal;
     @Element
     private String Value;

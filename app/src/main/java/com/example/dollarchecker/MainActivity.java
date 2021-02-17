@@ -1,21 +1,27 @@
 package com.example.dollarchecker;
 
-import androidx.annotation.RequiresApi;
+
 import androidx.appcompat.app.AppCompatActivity;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.icu.util.Calendar;
-import android.os.Build;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
-import com.example.dollarchecker.testretrofit.DollarBroadcattReciver;
+
+import com.example.dollarchecker.list.DollarListAdapter;
+import com.example.dollarchecker.list.ListController;
+import com.example.dollarchecker.network.CurrencyHelper;
+import com.example.dollarchecker.network.Record;
+import com.example.dollarchecker.notification.DollarBroadcattReciver;
+import com.example.dollarchecker.utilities.CalendarManipulation;
+
 import java.util.ArrayList;
+import java.util.Calendar;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -27,11 +33,10 @@ public class MainActivity extends AppCompatActivity {
     private SharedPreferences preferences;
     public static final String USER_VALUE = "user_value";
     //
-    DollarData data;
     AlarmManager alarmManager;
-    private DollarBroadcattReciver receiver = new DollarBroadcattReciver();
+    ListController listController;
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,21 +58,18 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(MainActivity.this, R.string.user_value_saved, Toast.LENGTH_LONG).show();
         });
 
-        //data
-        if(DollarData.baseDollarData==null) {
-            data = new DollarData();
-            DollarData.baseDollarData = data;
-        }else data = DollarData.baseDollarData;
+        //calendar dates
+        Calendar calendarEnd = Calendar.getInstance();
+        Calendar calendarStart = CalendarManipulation.getStart(calendarEnd);
 
-        //adapter
-        DollarData.vals.setValueList(new ArrayList<Record>());
-        DollarData.adapter = new DollarListAdapter(this,DollarData.vals.getValueList());
-        lv_history.setAdapter(DollarData.adapter);
+        //list manipulations
+        CurrencyHelper currencyHelper = new CurrencyHelper();
+        listController = new ListController(this, lv_history);
+        listController.fillList(currencyHelper.getLastList(calendarStart, calendarEnd));
 
-        data.getDollarHistory();
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
+
     private void startAlarm() {
         alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(this, DollarBroadcattReciver.class);
@@ -82,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        data.clearRx();
+        listController.clearDisposable();
         super.onDestroy();
     }
 }

@@ -1,4 +1,6 @@
-package com.example.dollarchecker;
+package com.example.dollarchecker.network;
+
+import com.example.dollarchecker.network.Record;
 
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.ElementList;
@@ -8,15 +10,15 @@ import java.util.List;
 
 @Root(name = "ValCurs")
 public class ValCurs {
-    @Attribute
+    @Attribute(required = false)
     private String ID;
-    @Attribute
+    @Attribute(required = false)
     private String DateRange1;
-    @Attribute
+    @Attribute(required = false)
     private String DateRange2;
-    @Attribute
+    @Attribute(required = false)
     private String name;
-    @ElementList(name = "Record", inline =  true, required = false)
+    @ElementList(name = "Record", inline =  true)
     private List<Record> valueList;
 
 
