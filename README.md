@@ -1,2 +1,2 @@
 # DollarChecker
-To be continued...
+Finish code refactoring
