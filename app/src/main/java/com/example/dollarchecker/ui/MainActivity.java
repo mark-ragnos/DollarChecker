@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(this.getLayoutInflater());
         setContentView(binding.getRoot());
-        viewModel = ViewModelProviders.of(this).get(MainActivityViewModel.class);
+        viewModel = ViewModelProviders.of(this, new AppViewModelFactory()).get(MainActivityViewModel.class);
 
         init();
         startAlarm();

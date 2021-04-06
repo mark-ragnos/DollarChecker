@@ -7,11 +7,12 @@ import com.example.dollarchecker.network.CurrencyHelper
 import io.reactivex.Single
 import java.util.*
 
-class MainActivityViewModel:ViewModel() {
+class MainActivityViewModel(private val currencyHelper: CurrencyHelper) : ViewModel() {
+
     private lateinit var record: Single<List<Record>>
 
     fun getRecords(start: Calendar, end: Calendar): Single<List<Record>> {
-        record = CurrencyHelper.getInstance().getLastList(start, end)
+        record = currencyHelper.getLastList(start, end)
         return record
     }
 }
