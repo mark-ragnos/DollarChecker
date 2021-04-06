@@ -1,4 +1,4 @@
-package com.example.dollarchecker.utilities;
+package com.example.dollarchecker.utility;
 
 import java.util.Calendar;
 

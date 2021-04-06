@@ -9,11 +9,11 @@ import android.os.Build;
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 
-import com.example.dollarchecker.MainActivity;
+import com.example.dollarchecker.ui.MainActivity;
 import com.example.dollarchecker.R;
 import com.example.dollarchecker.network.CurrencyHelper;
-import com.example.dollarchecker.network.Record;
-import com.example.dollarchecker.utilities.DataConverter;
+import com.example.dollarchecker.model.Record;
+import com.example.dollarchecker.utility.DataConverter;
 
 import java.util.Calendar;
 

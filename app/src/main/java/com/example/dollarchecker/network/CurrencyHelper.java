@@ -1,14 +1,15 @@
 package com.example.dollarchecker.network;
 
-import com.example.dollarchecker.utilities.DataConverter;
+import android.util.Log;
+
+import com.example.dollarchecker.model.Record;
+import com.example.dollarchecker.model.ValCurs;
+import com.example.dollarchecker.utility.DataConverter;
 
 import java.util.Calendar;
 import java.util.List;
 
 import io.reactivex.Single;
-import io.reactivex.SingleSource;
-import io.reactivex.annotations.NonNull;
-import io.reactivex.functions.Function;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.simplexml.SimpleXmlConverterFactory;
@@ -37,5 +38,12 @@ public class CurrencyHelper {
             return null;
         });
         return recordSingle;
+    }
+
+    private static CurrencyHelper helper;
+    public static CurrencyHelper getInstance(){
+        if(helper == null)
+            helper = new CurrencyHelper();
+        return helper;
     }
 }

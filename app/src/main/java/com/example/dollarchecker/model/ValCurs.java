@@ -1,6 +1,4 @@
-package com.example.dollarchecker.network;
-
-import com.example.dollarchecker.network.Record;
+package com.example.dollarchecker.model;
 
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.ElementList;

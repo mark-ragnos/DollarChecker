@@ -1,4 +1,4 @@
-package com.example.dollarchecker.network;
+package com.example.dollarchecker.model;
 
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Element;
