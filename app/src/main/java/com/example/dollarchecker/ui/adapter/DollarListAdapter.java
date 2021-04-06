@@ -8,7 +8,10 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import androidx.databinding.DataBindingUtil;
+
 import com.example.dollarchecker.R;
+import com.example.dollarchecker.databinding.ListItemBinding;
 import com.example.dollarchecker.model.Record;
 
 import java.util.List;
@@ -39,15 +42,29 @@ public class DollarListAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        View view = convertView;
-        if(convertView == null)
-            view = inflater.inflate(R.layout.list_item, parent, false);
+        DollarViewHolder holder;
 
-        Record record = getItem(position);
-        ((TextView)view.findViewById(R.id.li_tv_date)).setText(record.getDate());
-        ((TextView)view.findViewById(R.id.li_tv_value)).setText(record.getValue());
+        if(convertView==null){
+            ListItemBinding itemBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.list_item, parent, false);
 
-        return view;
+            holder = new DollarViewHolder(itemBinding);
+            holder.view = itemBinding.getRoot();
+            holder.view.setTag(holder);
+        }else {
+            holder = (DollarViewHolder) convertView.getTag();
+        }
+        holder.binding.setRecord(itemList.get(position));
+        return holder.view;
     }
 
+
+    private static class DollarViewHolder{
+        private View view;
+        private ListItemBinding binding;
+
+        public DollarViewHolder(ListItemBinding binding){
+            this.binding = binding;
+            this.view = binding.getRoot();
+        }
+    }
 }
