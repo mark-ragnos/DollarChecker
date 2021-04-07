@@ -58,7 +58,8 @@ public class MainActivity extends AppCompatActivity {
 
         Calendar calendarEnd = Calendar.getInstance();
         Calendar calendarStart = CalendarManipulation.getStart(calendarEnd);
-        setupList(viewModel.getRecords(calendarStart, calendarEnd));
+        disposable.add(setupList(viewModel.getRecords(calendarStart, calendarEnd))
+                .subscribe(res -> adapter.setItems(res)));
 
         binding.refresh.setOnRefreshListener(() -> {
             Calendar calendarEnd2 = Calendar.getInstance();
@@ -66,13 +67,7 @@ public class MainActivity extends AppCompatActivity {
 
             disposable.clear();
             binding.lvHistory.setVisibility(View.INVISIBLE);
-            disposable.add(viewModel.getRecords(calendarStart2, calendarEnd2)
-                    .subscribeOn(Schedulers.io())
-                    .map(r -> {
-                        Collections.reverse(r);
-                        return r;
-                    })
-                    .observeOn(AndroidSchedulers.mainThread())
+            disposable.add(setupList(viewModel.getRecords(calendarStart2, calendarEnd2))
                     .subscribe(res -> {
                                 adapter.setItems(res);
                                 binding.refresh.setRefreshing(false);
@@ -99,26 +94,15 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void setupList(Single<List<Record>> list) {
-        disposable.add(list
+    private Single<List<Record>> setupList(Single<List<Record>> list) {
+        return list
                 .subscribeOn(Schedulers.io())
-                .map(r -> {
-                    Collections.reverse(r);
-                    return r;
-                })
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(res -> adapter.setItems(res)));
-    }
-
-    private Single<List<Record>> setupListNew(Single<List<Record>> list) {
-        return list.subscribeOn(Schedulers.io())
                 .map(r -> {
                     Collections.reverse(r);
                     return r;
                 })
                 .observeOn(AndroidSchedulers.mainThread());
     }
-
 
     private void startAlarm() {
         alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
