@@ -10,6 +10,7 @@ import java.util.*
 class MainActivityViewModel(private val currencyHelper: CurrencyHelper) : ViewModel() {
 
     private lateinit var record: Single<List<Record>>
+    private lateinit var recordList: List<Record>
 
     fun getRecords(start: Calendar, end: Calendar): Single<List<Record>> {
         record = currencyHelper.getLastList(start, end)

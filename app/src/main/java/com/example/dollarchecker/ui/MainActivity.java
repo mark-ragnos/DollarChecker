@@ -4,6 +4,7 @@ package com.example.dollarchecker.ui;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -21,9 +22,9 @@ import com.example.dollarchecker.R;
 import com.example.dollarchecker.databinding.ActivityMainBinding;
 import com.example.dollarchecker.di.AppViewModelFactory;
 import com.example.dollarchecker.model.Record;
-import com.example.dollarchecker.ui.adapter.DollarListAdapter;
 import com.example.dollarchecker.network.CurrencyHelper;
 import com.example.dollarchecker.notification.DollarBroadcattReciver;
+import com.example.dollarchecker.ui.adapter.DollarListAdapterNew;
 import com.example.dollarchecker.utility.CalendarManipulation;
 
 import java.util.Calendar;
@@ -40,7 +41,7 @@ import io.reactivex.schedulers.Schedulers;
 public class MainActivity extends AppCompatActivity {
     private MainActivityViewModel viewModel;
     private ActivityMainBinding binding;
-    private DollarListAdapter adapter;
+    private DollarListAdapterNew adapter;
 
     private SharedPreferences preferences;
     public static final String USER_VALUE = "user_value";
@@ -65,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void init(){
-
+        binding.lvHistory.setLayoutManager(new LinearLayoutManager(this));
         preferences = getSharedPreferences(USER_VALUE, Context.MODE_PRIVATE);
         binding.etValue.setText(preferences.getString(USER_VALUE, "0.00"));
 
@@ -86,8 +87,12 @@ public class MainActivity extends AppCompatActivity {
                 })
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(res -> {
-                    adapter = new DollarListAdapter(this, res);
+                    adapter = new DollarListAdapterNew(res);
                     binding.lvHistory.setAdapter(adapter);
+
+                    //adapter = new DollarListAdapter(viewModel);
+                    //adapter.setItems(res);
+                    //binding.lvHistory.setAdapter(adapter);
         });
     }
 

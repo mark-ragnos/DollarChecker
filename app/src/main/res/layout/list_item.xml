@@ -2,8 +2,8 @@
 <layout>
     <data>
         <variable
-            name="record"
-            type="com.example.dollarchecker.model.Record" />
+            name="vm"
+            type="com.example.dollarchecker.ui.ListItemViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -23,7 +23,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:text="@{record.date}"/>
+            android:text="@{vm.record.date}"/>
 
         <TextView
             android:id="@+id/li_tv_value"
@@ -36,7 +36,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:text="@{record.value}"/>
+            android:text="@{vm.record.value}"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

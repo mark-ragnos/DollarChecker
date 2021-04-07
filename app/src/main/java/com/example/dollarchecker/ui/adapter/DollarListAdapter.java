@@ -1,70 +1,62 @@
-package com.example.dollarchecker.ui.adapter;
-
-import android.content.Context;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.TextView;
-
-import androidx.databinding.DataBindingUtil;
-
-import com.example.dollarchecker.R;
-import com.example.dollarchecker.databinding.ListItemBinding;
-import com.example.dollarchecker.model.Record;
-
-import java.util.List;
-
-public class DollarListAdapter extends BaseAdapter {
-    LayoutInflater inflater;
-    List<Record> itemList;
-
-    public DollarListAdapter(Context context, List<Record> itemList) {
-        this.itemList = itemList;
-        inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-    }
-
-    @Override
-    public int getCount() {
-        return itemList.size();
-    }
-
-    @Override
-    public Record getItem(int position) {
-        return itemList.get(position);
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return position;
-    }
-
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        DollarViewHolder holder;
-
-        if(convertView==null){
-            ListItemBinding itemBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.list_item, parent, false);
-
-            holder = new DollarViewHolder(itemBinding);
-            holder.view = itemBinding.getRoot();
-            holder.view.setTag(holder);
-        }else {
-            holder = (DollarViewHolder) convertView.getTag();
-        }
-        holder.binding.setRecord(itemList.get(position));
-        return holder.view;
-    }
-
-
-    private static class DollarViewHolder{
-        private View view;
-        private ListItemBinding binding;
-
-        public DollarViewHolder(ListItemBinding binding){
-            this.binding = binding;
-            this.view = binding.getRoot();
-        }
-    }
-}
+//package com.example.dollarchecker.ui.adapter;
+//
+//import android.content.Context;
+//import android.util.Log;
+//import android.view.LayoutInflater;
+//import android.view.View;
+//import android.view.ViewGroup;
+//import android.widget.BaseAdapter;
+//import android.widget.TextView;
+//
+//import androidx.annotation.NonNull;
+//import androidx.databinding.DataBindingUtil;
+//import androidx.lifecycle.LifecycleOwner;
+//import androidx.recyclerview.widget.DiffUtil;
+//import androidx.recyclerview.widget.RecyclerView;
+//
+//import com.example.dollarchecker.BR;
+//import com.example.dollarchecker.R;
+//import com.example.dollarchecker.databinding.ListItemBinding;
+//import com.example.dollarchecker.model.Record;
+//import com.example.dollarchecker.ui.ListItemViewModel;
+//import com.example.dollarchecker.ui.MainActivityViewModel;
+//import com.ravikwow.databinding.adapter.RVAdapterViewHolder;
+//import com.ravikwow.databinding.adapter.RecyclerViewAdapter;
+//
+//import java.util.List;
+//
+//public class DollarListAdapter extends RecyclerViewAdapter<Record, ListItemViewModel> {
+//    MainActivityViewModel mainActivityViewModel;
+//
+//    public DollarListAdapter(MainActivityViewModel mainActivityViewModel) {
+//        super(new CompareCallbacks<Record>() {
+//            @Override
+//            public boolean areItemsTheSame(Record record, Record t1) {
+//                return record.getDate() == record.getDate();
+//            }
+//
+//            @Override
+//            public boolean areContentsTheSame(Record record, Record t1) {
+//                return record.getDate() == record.getDate();
+//            }
+//        }, R.layout.list_item);
+//        this.mainActivityViewModel = mainActivityViewModel;
+//    }
+//
+//
+//    @Override
+//    protected void bindViewModel(Record record, ListItemViewModel listItemViewModel, int i) {
+//        listItemViewModel.bind(record);
+//    }
+//
+//    @Override
+//    public void onBindViewHolder(RVAdapterViewHolder<ListItemViewModel> holder, int position, List<Object> payloads) {
+//        holder.binding.setVariable(BR.mainViewModel, mainActivityViewModel);
+//        if (payloads == null || payloads.isEmpty())
+//            super.onBindViewHolder(holder, position, payloads);
+//        else {
+//            Record record = (Record) payloads.get(payloads.size() - 1);
+//            holder.getVm().bind(record);
+//        }
+//    }
+//}
