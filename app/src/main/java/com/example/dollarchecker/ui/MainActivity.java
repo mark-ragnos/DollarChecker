@@ -1,10 +1,6 @@
 package com.example.dollarchecker.ui;
 
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.LinearLayoutManager;
-
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -12,6 +8,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProviders;
 
 import com.example.dollarchecker.R;
 import com.example.dollarchecker.databinding.ActivityMainBinding;
@@ -32,15 +31,12 @@ import io.reactivex.schedulers.Schedulers;
 
 
 public class MainActivity extends AppCompatActivity {
+    public static final String USER_VALUE = "user_value";
+    AlarmManager alarmManager;
     private MainActivityViewModel viewModel;
     private ActivityMainBinding binding;
     private DollarListAdapter adapter;
-
     private SharedPreferences preferences;
-    public static final String USER_VALUE = "user_value";
-
-    AlarmManager alarmManager;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,8 +54,12 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void init(){
-        binding.lvHistory.setLayoutManager(new LinearLayoutManager(this));
+    private void init() {
+        // Не надо все время создавать адаптер. Нужно его создать один раз
+        // и потом в него передавать данные, а он сам ищет разницу
+        adapter = new DollarListAdapter(this);
+        binding.lvHistory.setAdapter(adapter);
+
         preferences = getSharedPreferences(USER_VALUE, Context.MODE_PRIVATE);
         binding.etValue.setText(preferences.getString(USER_VALUE, "0.00"));
 
@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private void setupList(Single<List<Record>> list){
+    private void setupList(Single<List<Record>> list) {
         Disposable dis = list
                 .subscribeOn(Schedulers.io())
                 .map(r -> {
@@ -79,17 +79,12 @@ public class MainActivity extends AppCompatActivity {
                     return r;
                 })
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(res -> {
-                    adapter = new DollarListAdapter();
-                    adapter.setItems(res);
-                    binding.lvHistory.setAdapter(adapter);
-        });
+                .subscribe(res -> adapter.setItems(res));
     }
 
 
-
     private void startAlarm() {
-        alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
+        alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(this, DollarBroadcattReciver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         Calendar calendar = Calendar.getInstance();
