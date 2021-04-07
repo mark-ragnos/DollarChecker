@@ -7,10 +7,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
+import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.dollarchecker.R;
 import com.example.dollarchecker.databinding.ActivityMainBinding;
@@ -24,8 +28,10 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 
+import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
@@ -37,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
     private DollarListAdapter adapter;
     private SharedPreferences preferences;
+    private CompositeDisposable disposable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +51,8 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(this.getLayoutInflater());
         setContentView(binding.getRoot());
         viewModel = ViewModelProviders.of(this, new AppViewModelFactory()).get(MainActivityViewModel.class);
-
+        binding.setViewModel(viewModel);
+        disposable = new CompositeDisposable();
         init();
         startAlarm();
 
@@ -52,6 +60,27 @@ public class MainActivity extends AppCompatActivity {
         Calendar calendarStart = CalendarManipulation.getStart(calendarEnd);
         setupList(viewModel.getRecords(calendarStart, calendarEnd));
 
+        binding.refresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                disposable.clear();
+                binding.lvHistory.setVisibility(View.INVISIBLE);
+                disposable.add(viewModel.getRecords(calendarStart, calendarEnd)
+                        .subscribeOn(Schedulers.io())
+                        .map(r -> {
+                            Collections.reverse(r);
+                            return r;
+                        })
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(res -> {
+                                    adapter.setItems(res);
+                                    binding.refresh.setRefreshing(false);
+                                    binding.lvHistory.setVisibility(View.VISIBLE);
+                                }
+                        )
+                );
+            }
+        });
     }
 
     private void init() {
@@ -70,16 +99,24 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-
     private void setupList(Single<List<Record>> list) {
-        Disposable dis = list
+        disposable.add(list
                 .subscribeOn(Schedulers.io())
                 .map(r -> {
                     Collections.reverse(r);
                     return r;
                 })
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(res -> adapter.setItems(res));
+                .subscribe(res -> adapter.setItems(res)));
+    }
+
+    private Single<List<Record>> setupListNew(Single<List<Record>> list) {
+        return list.subscribeOn(Schedulers.io())
+                .map(r -> {
+                    Collections.reverse(r);
+                    return r;
+                })
+                .observeOn(AndroidSchedulers.mainThread());
     }
 
 
