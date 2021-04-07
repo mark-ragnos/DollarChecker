@@ -25,8 +25,8 @@ class DollarListAdapterNew(private val items: List<Record>) : RecyclerView.Adapt
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        if(holder.binding.vm == null){
-            holder.binding.vm = ListItemViewModel(items[position])
+        if(holder.binding.viewModel == null){
+            holder.binding.viewModel = ListItemViewModel(items[position])
         }
     }
 

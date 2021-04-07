@@ -24,6 +24,7 @@ import com.example.dollarchecker.di.AppViewModelFactory;
 import com.example.dollarchecker.model.Record;
 import com.example.dollarchecker.network.CurrencyHelper;
 import com.example.dollarchecker.notification.DollarBroadcattReciver;
+import com.example.dollarchecker.ui.adapter.DollarListAdapter;
 import com.example.dollarchecker.ui.adapter.DollarListAdapterNew;
 import com.example.dollarchecker.utility.CalendarManipulation;
 
@@ -41,7 +42,7 @@ import io.reactivex.schedulers.Schedulers;
 public class MainActivity extends AppCompatActivity {
     private MainActivityViewModel viewModel;
     private ActivityMainBinding binding;
-    private DollarListAdapterNew adapter;
+    private DollarListAdapter adapter;
 
     private SharedPreferences preferences;
     public static final String USER_VALUE = "user_value";
@@ -87,7 +88,8 @@ public class MainActivity extends AppCompatActivity {
                 })
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(res -> {
-                    adapter = new DollarListAdapterNew(res);
+                    adapter = new DollarListAdapter(viewModel);
+                    adapter.setItems(res);
                     binding.lvHistory.setAdapter(adapter);
 
                     //adapter = new DollarListAdapter(viewModel);
