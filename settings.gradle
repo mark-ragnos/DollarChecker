@@ -1,2 +1,3 @@
+include ':DataBindingRVAdapter'
 include ':app'
 rootProject.name = "DollarChecker"
