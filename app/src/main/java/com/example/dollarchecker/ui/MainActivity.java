@@ -60,26 +60,26 @@ public class MainActivity extends AppCompatActivity {
         Calendar calendarStart = CalendarManipulation.getStart(calendarEnd);
         setupList(viewModel.getRecords(calendarStart, calendarEnd));
 
-        binding.refresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                disposable.clear();
-                binding.lvHistory.setVisibility(View.INVISIBLE);
-                disposable.add(viewModel.getRecords(calendarStart, calendarEnd)
-                        .subscribeOn(Schedulers.io())
-                        .map(r -> {
-                            Collections.reverse(r);
-                            return r;
-                        })
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(res -> {
-                                    adapter.setItems(res);
-                                    binding.refresh.setRefreshing(false);
-                                    binding.lvHistory.setVisibility(View.VISIBLE);
-                                }
-                        )
-                );
-            }
+        binding.refresh.setOnRefreshListener(() -> {
+            Calendar calendarEnd2 = Calendar.getInstance();
+            Calendar calendarStart2 = CalendarManipulation.getStart2(calendarEnd);
+
+            disposable.clear();
+            binding.lvHistory.setVisibility(View.INVISIBLE);
+            disposable.add(viewModel.getRecords(calendarStart2, calendarEnd2)
+                    .subscribeOn(Schedulers.io())
+                    .map(r -> {
+                        Collections.reverse(r);
+                        return r;
+                    })
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(res -> {
+                                adapter.setItems(res);
+                                binding.refresh.setRefreshing(false);
+                                binding.lvHistory.setVisibility(View.VISIBLE);
+                            }
+                    )
+            );
         });
     }
 
@@ -130,5 +130,11 @@ public class MainActivity extends AppCompatActivity {
         calendar.set(Calendar.SECOND, 0);
         //alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, Calendar.getInstance().getTimeInMillis() + 1000, 10000, pendingIntent);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        disposable.clear();
     }
 }
