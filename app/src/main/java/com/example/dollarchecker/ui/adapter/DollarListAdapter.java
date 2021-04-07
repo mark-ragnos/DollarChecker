@@ -26,9 +26,8 @@ import com.ravikwow.databinding.adapter.RecyclerViewAdapter;
 import java.util.List;
 
 public class DollarListAdapter extends RecyclerViewAdapter<Record, ListItemViewModel> {
-    MainActivityViewModel mainActivityViewModel;
 
-    public DollarListAdapter(MainActivityViewModel mainActivityViewModel) {
+    public DollarListAdapter() {
         super(new CompareCallbacks<Record>() {
             @Override
             public boolean areItemsTheSame(Record record, Record t1) {
@@ -40,7 +39,6 @@ public class DollarListAdapter extends RecyclerViewAdapter<Record, ListItemViewM
                 return record.getDate() == record.getDate();
             }
         }, R.layout.list_item);
-        this.mainActivityViewModel = mainActivityViewModel;
     }
 
 
@@ -51,7 +49,6 @@ public class DollarListAdapter extends RecyclerViewAdapter<Record, ListItemViewM
 
     @Override
     public void onBindViewHolder(RVAdapterViewHolder<ListItemViewModel> holder, int position, List<Object> payloads) {
-        holder.binding.setVariable(BR.mainViewModel, mainActivityViewModel);
         if (payloads == null || payloads.isEmpty())
             super.onBindViewHolder(holder, position, payloads);
         else {

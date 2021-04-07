@@ -4,9 +4,6 @@
         <variable
             name="viewModel"
             type="com.example.dollarchecker.ui.ListItemViewModel" />
-        <variable
-            name="mainViewModel"
-            type="com.example.dollarchecker.ui.MainActivityViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
