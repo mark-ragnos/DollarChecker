@@ -1,6 +1,5 @@
 package com.example.dollarchecker.network;
 
-import android.util.Log;
 
 import com.example.dollarchecker.model.Record;
 import com.example.dollarchecker.model.ValCurs;

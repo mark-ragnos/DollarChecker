@@ -1,9 +1,7 @@
 package com.example.dollarchecker.network
 
-import androidx.paging.DataSource
 import com.example.dollarchecker.model.ValCurs
 import retrofit2.Call
-import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.simplexml.SimpleXmlConverterFactory
 import retrofit2.http.GET
@@ -27,6 +25,5 @@ interface CbrApiNew {
 
             return instance!!
         }
-
     }
 }

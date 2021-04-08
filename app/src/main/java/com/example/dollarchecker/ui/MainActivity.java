@@ -7,36 +7,27 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Handler;
-import android.util.Log;
-import android.view.View;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProviders;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.dollarchecker.R;
 import com.example.dollarchecker.databinding.ActivityMainBinding;
 import com.example.dollarchecker.di.AppViewModelFactory;
 import com.example.dollarchecker.model.Record;
-import com.example.dollarchecker.network.CbrApi;
-import com.example.dollarchecker.network.CbrApiNew;
 import com.example.dollarchecker.notification.DollarBroadcattReciver;
 import com.example.dollarchecker.ui.adapter.DollarListAdapter;
 import com.example.dollarchecker.ui.adapter.DollarPageAdapter;
 import com.example.dollarchecker.utility.CalendarManipulation;
-import com.example.dollarchecker.utility.DataConverter;
 
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 
-import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 
@@ -62,6 +53,11 @@ public class MainActivity extends AppCompatActivity {
         startAlarm();
         //oldList();
 
+
+        binding.refresh.setOnRefreshListener(() -> {
+            pageAdapter.reload();
+            binding.refresh.setRefreshing(false);
+        });
     }
 
     private void init() {
