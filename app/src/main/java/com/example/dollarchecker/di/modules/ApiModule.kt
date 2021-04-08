@@ -1,4 +1,4 @@
-package com.example.dollarchecker.di
+package com.example.dollarchecker.di.modules
 
 import com.example.dollarchecker.network.CurrencyHelper
 import dagger.Module

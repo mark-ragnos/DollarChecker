@@ -14,7 +14,7 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.example.dollarchecker.R;
 import com.example.dollarchecker.databinding.ActivityMainBinding;
-import com.example.dollarchecker.di.AppViewModelFactory;
+import com.example.dollarchecker.di.core.AppViewModelFactory;
 import com.example.dollarchecker.model.Record;
 import com.example.dollarchecker.notification.DollarBroadcattReciver;
 import com.example.dollarchecker.ui.adapter.DollarListAdapter;

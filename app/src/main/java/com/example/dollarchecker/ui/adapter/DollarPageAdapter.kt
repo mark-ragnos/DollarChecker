@@ -30,9 +30,11 @@ class DollarPageAdapter(
         var todayOrLast: Calendar = Calendar.getInstance()
 
         override fun getData(start: Long, pages: Int): List<Record>? {
+            Log.d("TEST", "start = $start || pages = $pages")
             if (start == 0L)
                 todayOrLast = Calendar.getInstance()
-            Log.d("TEST", "START = $start | pages = $pages")
+            else
+                todayOrLast.add(Calendar.HOUR, -24)
             val start = todayOrLast.clone() as Calendar
             start.changeMonth(-pages)
             val result = CbrApiNew.create().getMouthData(start.getAsText(), todayOrLast.getAsText()).execute().body()?.valueList
@@ -49,7 +51,7 @@ class DollarPageAdapter(
         fun create(): DollarPageAdapter {
             return DollarPageAdapter(diffCallback = object : DiffUtil.ItemCallback<Record>() {
                 override fun areItemsTheSame(oldItem: Record, newItem: Record): Boolean {
-                    return oldItem.date == newItem.date
+                    return oldItem.id == newItem.id
                 }
 
                 override fun areContentsTheSame(oldItem: Record, newItem: Record): Boolean {
