@@ -25,12 +25,12 @@ public class CurrencyHelper {
                 .build();
     }
 
-    public Single<List<Record>> getLastList(Calendar date1, Calendar date2){
+    public Single<List<Record>> getLastList(Calendar date1, Calendar date2) {
         Single<ValCurs> dollarsByRangeRX = retrofit.create(CbrApi.class).getDollarsByRangeRX(DataConverter.getDateString(date1), DataConverter.getDateString(date2));
         return dollarsByRangeRX.flatMap(r -> Single.just(r.getValueList()));
     }
 
-    public Single<Record> getToday(Calendar date){
+    public Single<Record> getToday(Calendar date) {
         Single<ValCurs> dollarsByRangeRX = retrofit.create(CbrApi.class).getDollarsByRangeRX(DataConverter.getDateString(date), DataConverter.getDateString(date));
         Single<Record> recordSingle = dollarsByRangeRX.flatMap(r -> {
             if (r.getValueList().size() > 0)
@@ -41,8 +41,9 @@ public class CurrencyHelper {
     }
 
     private static CurrencyHelper helper;
-    public static CurrencyHelper getInstance(){
-        if(helper == null)
+
+    public static CurrencyHelper getInstance() {
+        if (helper == null)
             helper = new CurrencyHelper();
         return helper;
     }

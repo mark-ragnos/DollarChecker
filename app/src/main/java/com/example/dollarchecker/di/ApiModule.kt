@@ -8,7 +8,7 @@ import dagger.Provides
 class ApiModule {
 
     @Provides
-    fun getCurrencyHelper():CurrencyHelper{
+    fun getCurrencyHelper(): CurrencyHelper {
         return CurrencyHelper.getInstance()
     }
 }

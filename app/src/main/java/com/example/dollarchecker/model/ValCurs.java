@@ -16,7 +16,7 @@ public class ValCurs {
     private String DateRange2;
     @Attribute(required = false)
     private String name;
-    @ElementList(name = "Record", inline =  true)
+    @ElementList(name = "Record", inline = true)
     private List<Record> valueList;
 
 

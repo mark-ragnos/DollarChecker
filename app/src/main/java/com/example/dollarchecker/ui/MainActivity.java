@@ -62,16 +62,14 @@ public class MainActivity extends AppCompatActivity {
                 .subscribe(res -> adapter.setItems(res)));
 
         binding.refresh.setOnRefreshListener(() -> {
-            Calendar calendarEnd2 = Calendar.getInstance();
+            Calendar calendarEnd2 = CalendarManipulation.getStart(Calendar.getInstance());
             Calendar calendarStart2 = CalendarManipulation.getStart2(calendarEnd);
 
             disposable.clear();
-            binding.lvHistory.setVisibility(View.INVISIBLE);
             disposable.add(setupList(viewModel.getRecords(calendarStart2, calendarEnd2))
                     .subscribe(res -> {
                                 adapter.setItems(res);
                                 binding.refresh.setRefreshing(false);
-                                binding.lvHistory.setVisibility(View.VISIBLE);
                             }
                     )
             );
@@ -83,6 +81,7 @@ public class MainActivity extends AppCompatActivity {
         // и потом в него передавать данные, а он сам ищет разницу
         adapter = new DollarListAdapter(this);
         binding.lvHistory.setAdapter(adapter);
+        binding.lvHistory.setHasFixedSize(true);
 
         preferences = getSharedPreferences(USER_VALUE, Context.MODE_PRIVATE);
         binding.etValue.setText(preferences.getString(USER_VALUE, "0.00"));
