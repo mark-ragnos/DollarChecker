@@ -20,9 +20,13 @@ import com.example.dollarchecker.R;
 import com.example.dollarchecker.databinding.ActivityMainBinding;
 import com.example.dollarchecker.di.AppViewModelFactory;
 import com.example.dollarchecker.model.Record;
+import com.example.dollarchecker.network.CbrApi;
+import com.example.dollarchecker.network.CbrApiNew;
 import com.example.dollarchecker.notification.DollarBroadcattReciver;
 import com.example.dollarchecker.ui.adapter.DollarListAdapter;
+import com.example.dollarchecker.ui.adapter.DollarPageAdapter;
 import com.example.dollarchecker.utility.CalendarManipulation;
+import com.example.dollarchecker.utility.DataConverter;
 
 import java.util.Calendar;
 import java.util.Collections;
@@ -42,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
     private MainActivityViewModel viewModel;
     private ActivityMainBinding binding;
     private DollarListAdapter adapter;
+    private DollarPageAdapter pageAdapter;
     private SharedPreferences preferences;
     private CompositeDisposable disposable;
 
@@ -55,9 +60,34 @@ public class MainActivity extends AppCompatActivity {
         disposable = new CompositeDisposable();
         init();
         startAlarm();
+        //oldList();
+
+    }
+
+    private void init() {
+        // Не надо все время создавать адаптер. Нужно его создать один раз
+        // и потом в него передавать данные, а он сам ищет разницу
+        pageAdapter = DollarPageAdapter.Companion.create();
+        binding.lvHistory.setAdapter(pageAdapter);
+        binding.lvHistory.setHasFixedSize(true);
+
+        preferences = getSharedPreferences(USER_VALUE, Context.MODE_PRIVATE);
+        binding.etValue.setText(preferences.getString(USER_VALUE, "0.00"));
+
+        binding.btnSaveuservalue.setOnClickListener(v -> {
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putString(USER_VALUE, binding.etValue.getText().toString()).apply();
+            Toast.makeText(MainActivity.this, R.string.user_value_saved, Toast.LENGTH_LONG).show();
+        });
+    }
+
+    private void oldList(){
+        adapter = new DollarListAdapter(this);
+        binding.lvHistory.setAdapter(adapter);
 
         Calendar calendarEnd = Calendar.getInstance();
         Calendar calendarStart = CalendarManipulation.getStart(calendarEnd);
+
         disposable.add(setupList(viewModel.getRecords(calendarStart, calendarEnd))
                 .subscribe(res -> adapter.setItems(res)));
 
@@ -73,23 +103,6 @@ public class MainActivity extends AppCompatActivity {
                             }
                     )
             );
-        });
-    }
-
-    private void init() {
-        // Не надо все время создавать адаптер. Нужно его создать один раз
-        // и потом в него передавать данные, а он сам ищет разницу
-        adapter = new DollarListAdapter(this);
-        binding.lvHistory.setAdapter(adapter);
-        binding.lvHistory.setHasFixedSize(true);
-
-        preferences = getSharedPreferences(USER_VALUE, Context.MODE_PRIVATE);
-        binding.etValue.setText(preferences.getString(USER_VALUE, "0.00"));
-
-        binding.btnSaveuservalue.setOnClickListener(v -> {
-            SharedPreferences.Editor editor = preferences.edit();
-            editor.putString(USER_VALUE, binding.etValue.getText().toString()).apply();
-            Toast.makeText(MainActivity.this, R.string.user_value_saved, Toast.LENGTH_LONG).show();
         });
     }
 
