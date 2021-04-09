@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
     private void init() {
         // Не надо все время создавать адаптер. Нужно его создать один раз
         // и потом в него передавать данные, а он сам ищет разницу
-        pageAdapter = DollarPageAdapter.Companion.create();
+        pageAdapter = DollarPageAdapter.Companion.create(this);
         binding.lvHistory.setAdapter(pageAdapter);
         binding.lvHistory.setHasFixedSize(true);
 

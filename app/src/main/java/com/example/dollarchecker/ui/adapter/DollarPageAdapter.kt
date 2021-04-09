@@ -2,6 +2,7 @@ package com.example.dollarchecker.ui.adapter
 
 
 import android.util.Log
+import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.DiffUtil
 import com.example.dollarchecker.R
 import com.example.dollarchecker.model.Record
@@ -16,8 +17,9 @@ class DollarPageAdapter(
         diffCallback: DiffUtil.ItemCallback<Record>,
         private val getData: GetData<Record>,
         pageSize: Int,
+        lifecycleOwner: LifecycleOwner,
         vararg resIdsViews: Int
-) : RecyclerViewPagedAdapter<Record, ListItemViewModel>(diffCallback, getData, pageSize, *resIdsViews) {
+) : RecyclerViewPagedAdapter<Record, ListItemViewModel>(diffCallback, getData, pageSize, lifecycleOwner, *resIdsViews) {
 
     override fun bindViewModel(model: Record?, viewModel: ListItemViewModel?, position: Int) {
         model?.let {
@@ -48,7 +50,7 @@ class DollarPageAdapter(
     companion object {
         private const val pageSize = 2
 
-        fun create(): DollarPageAdapter {
+        fun create(lifecycleOwner: LifecycleOwner): DollarPageAdapter {
             return DollarPageAdapter(diffCallback = object : DiffUtil.ItemCallback<Record>() {
                 override fun areItemsTheSame(oldItem: Record, newItem: Record): Boolean {
                     return oldItem.id == newItem.id
@@ -61,6 +63,7 @@ class DollarPageAdapter(
             },
                     getData = GetDataRecord(),
                     pageSize = pageSize,
+                    lifecycleOwner = lifecycleOwner,
                     R.layout.list_item)
         }
     }

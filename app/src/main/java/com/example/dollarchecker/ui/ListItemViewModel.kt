@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import com.example.dollarchecker.model.Record
 
 
-class ListItemViewModel : ViewModel() {
+class ListItemViewModel {
     // Лучше для каждого элемента на экране сделать свою переменную, тогда можно будет поменять
     // только ее и сделать локику для изменения, когда в модели приходит значение в одном виде,
     // а тебе надо отобразить в другом.
